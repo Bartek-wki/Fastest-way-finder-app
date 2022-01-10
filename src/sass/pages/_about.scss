@@ -1,0 +1,47 @@
+.intro-box-left {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  margin-bottom: 50px;
+  margin-left: 80px;
+}
+
+.intro-box-image-left {
+  position: absolute;
+  max-width: 600px;
+  height: 100%;
+}
+
+.intro-box-image-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.intro-box-text-left {
+  position: relative;
+}
+
+.intro-box-right {
+  position: relative;
+  width: 1000px;
+  height: 500px;
+  margin-bottom: 50px;
+  margin-right: 50px;
+}
+
+.intro-box-image-right {
+  position: absolute;
+  max-width: 1000px;
+  height: 100%;
+}
+
+.intro-box-image-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.intro-box-text-right {
+  position: relative;
+}
