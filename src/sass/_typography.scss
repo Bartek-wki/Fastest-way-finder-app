@@ -1,0 +1,58 @@
+h1 {
+  font-family: $font-main;
+  font-size: 80px;
+  letter-spacing: 50px;
+  font-weight: $font-black;
+  text-transform: uppercase;
+  color: $color-light;
+  text-align: right;
+}
+
+h2 {
+  font-family: $font-main;
+  font-size: 28px;
+  letter-spacing: 10px;
+  font-weight: $font-bold;
+  text-transform: uppercase;
+  color: $color-light;
+  text-align: right;
+  margin-right: 36px;
+}
+
+h3 {
+  font-family: $font-main;
+  font-size: 48px;
+  letter-spacing: 10px;
+  font-weight: $font-semibold;
+  text-transform: uppercase;
+  color: $color-light;
+}
+
+h4 {
+  font-family: $font-main;
+  font-size: 36px;
+  letter-spacing: 5px;
+  font-weight: $font-regular;
+  color: $color-light;
+}
+
+.nav-link,
+p {
+  font-family: $font-main;
+  font-size: 20px;
+  letter-spacing: 5px;
+  font-weight: $font-regular;
+  color: $color-light;
+}
+
+@media (min-width: 1500px) and (max-width: 1700px) {
+  h3 {
+    font-size: 36px;
+    letter-spacing: 7px;
+  }
+
+  h4 {
+    font-size: 22px;
+    letter-spacing: 7px;
+  }
+}
