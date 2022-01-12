@@ -11,6 +11,10 @@
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, $color-dark 99%);
 }
 
+.nav-item {
+  padding: 10px 30px;
+}
+
 .title-box {
   width: 1069px;
   margin-top: 175px;
@@ -25,4 +29,74 @@
 
 .footer {
   padding: 60px 0 60px 0;
+}
+
+.col {
+  padding: 0;
+}
+
+.row {
+  margin: 0;
+}
+
+@media (min-width: 1440px) and (max-width: 1700px) {
+  .title-box {
+    width: 1069px;
+    margin-top: 100px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .title-box {
+    width: 900px;
+    margin-top: 70px;
+  }
+
+  .nav-item {
+    padding: 0 25px;
+    margin-top: -10px;
+  }
+
+  .footer {
+    padding: 20px 0 20px 0;
+    margin-top: -40px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .title-box {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .nav-item {
+    padding: 0 20px;
+    margin-top: -10px;
+  }
+
+  .footer {
+    padding: 40px 0 40px 0;
+    margin-top: -60px;
+  }
+}
+
+@media (max-width: 767px) {
+  .title-box {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .nav-item {
+    padding: 0 5px;
+    margin-top: -25px;
+  }
+
+  .footer {
+    padding: 30px 0 20px 0;
+    margin-top: 0;
+  }
+
+  .row {
+    max-width: 100%;
+  }
 }

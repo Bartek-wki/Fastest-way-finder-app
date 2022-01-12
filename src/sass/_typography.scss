@@ -5,7 +5,7 @@ h1 {
   font-weight: $font-black;
   text-transform: uppercase;
   color: $color-light;
-  text-align: right;
+  text-align: center;
 }
 
 h2 {
@@ -36,16 +36,21 @@ h4 {
   color: $color-light;
 }
 
+a:hover {
+  text-decoration: none;
+  color: $color-light;
+}
+
 .nav-link,
 p {
   font-family: $font-main;
   font-size: 20px;
   letter-spacing: 5px;
-  font-weight: $font-regular;
+  font-weight: $font-semibold;
   color: $color-light;
 }
 
-@media (min-width: 1500px) and (max-width: 1700px) {
+@media (min-width: 1440px) and (max-width: 1700px) {
   h3 {
     font-size: 36px;
     letter-spacing: 7px;
@@ -54,5 +59,90 @@ p {
   h4 {
     font-size: 22px;
     letter-spacing: 7px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  h3 {
+    font-size: 26px;
+    letter-spacing: 5px;
+  }
+
+  h4 {
+    font-size: 18px;
+    letter-spacing: 3px;
+  }
+
+  .nav-link,
+  p {
+    font-size: 14px;
+    letter-spacing: 3px;
+  }
+
+  h1 {
+    font-size: 46px;
+    letter-spacing: 40px;
+  }
+
+  h2 {
+    font-size: 18px;
+    letter-spacing: 10px;
+    margin-right: 120px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  h3 {
+    font-size: 20px;
+    letter-spacing: 4px;
+  }
+
+  h4 {
+    font-size: 14px;
+    letter-spacing: 3px;
+  }
+
+  .nav-link,
+  p {
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  h1 {
+    font-size: 36px;
+    letter-spacing: 25px;
+  }
+  h2 {
+    font-size: 14px;
+    letter-spacing: 7px;
+    margin-right: 130px;
+  }
+}
+
+@media (max-width: 767px) {
+  h3 {
+    font-size: 12px;
+    letter-spacing: 4px;
+  }
+
+  h4 {
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+
+  .nav-link,
+  p {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  h1 {
+    font-size: 25px;
+    letter-spacing: 15px;
+  }
+  h2 {
+    font-size: 8px;
+    letter-spacing: 5px;
+    margin-right: 40px;
   }
 }
