@@ -50,6 +50,15 @@ p {
   color: $color-light;
 }
 
+h5 {
+  font-family: $font-main;
+  font-size: 48px;
+  letter-spacing: 10px;
+  font-weight: $font-bold;
+  text-transform: uppercase;
+  color: $color-light;
+}
+
 @media (min-width: 1440px) and (max-width: 1700px) {
   h3 {
     font-size: 36px;
@@ -59,6 +68,11 @@ p {
   h4 {
     font-size: 22px;
     letter-spacing: 7px;
+  }
+
+  h5 {
+    font-size: 42px;
+    letter-spacing: 10px;
   }
 }
 
@@ -89,6 +103,11 @@ p {
     letter-spacing: 10px;
     margin-right: 120px;
   }
+
+  h5 {
+    font-size: 32px;
+    letter-spacing: 8px;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -112,6 +131,7 @@ p {
     font-size: 36px;
     letter-spacing: 25px;
   }
+
   h2 {
     font-size: 14px;
     letter-spacing: 7px;
@@ -140,6 +160,7 @@ p {
     font-size: 25px;
     letter-spacing: 15px;
   }
+
   h2 {
     font-size: 8px;
     letter-spacing: 5px;
