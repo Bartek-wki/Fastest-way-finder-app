@@ -42,10 +42,11 @@
   border-color: $color-main;
   border-radius: 0;
   width: 280px;
-
-  P {
-    margin: 0;
-  }
+  font-family: $font-main;
+  font-size: 20px;
+  letter-spacing: 5px;
+  font-weight: $font-semibold;
+  color: $color-light;
 }
 
 .btn-primary:hover {
@@ -96,6 +97,8 @@
 
   .btn-primary {
     width: 200px;
+    font-size: 14px;
+    letter-spacing: 3px;
   }
 }
 

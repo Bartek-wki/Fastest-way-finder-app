@@ -1,4 +1,5 @@
 import { select, classNames } from './settings.js';
+import drawRoutes from './components/drawRoutes.js';
 
 const app = {
   initPages: function () {
@@ -6,11 +7,10 @@ const app = {
 
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
     thisApp.navLinks = document.querySelectorAll(select.nav.links);
-
+    
     const idfromHash = window.location.hash.replace('#/', '');
 
     let pageMatchingHash = thisApp.pages[0].id;
-    console.log(pageMatchingHash);
 
     for (let page of thisApp.pages) {
       if (page.id == idfromHash) {
@@ -50,10 +50,18 @@ const app = {
     }
   },
 
+  initDrawRoutes: function () {
+    const thisApp = this;
+    const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
+    
+    thisApp.drawRoutes = new drawRoutes(finderWrapper);
+  },
+
   init: function () {
     const thisApp = this;
 
     thisApp.initPages();
+    thisApp.initDrawRoutes();
 
   }
 };
