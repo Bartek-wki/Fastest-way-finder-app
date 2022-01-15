@@ -2,7 +2,16 @@ export const select = {
   containerOf: {
     pages: '#pages',
     stepHeader: '.step-header',
-    stepButton: '.step-button',
+    buttons: {
+      finishDrawing: '#button-one-wrapper',
+      compute: '#button-two-wrapper',
+      startAgain: '#button-three-wrapper',
+    },
+    headers: {
+      stepOne: '#header-one-wrapper',
+      stepTwo: '#header-two-wrapper',
+      stepThree: '#header-three-wrapper',
+    },
     finderWrapper: '.finder-wrapper',
   },
   nav: {
@@ -10,19 +19,43 @@ export const select = {
   },
   grid: {
     grid: '.grid',
+    cell: '.cell',
+    selectedCell: '.selected-cell',
+  },
+  buttons: {
+    finishDrawing: '#button-one',
+    compute: '#button-two',
+    startAgain: '#button-three',
   },
 };
 
 export const classNames = {
   pages: {
-    active: 'active-page'
+    active: 'active-page',
   },
-
   nav: {
-    active: 'active-link'
+    active: 'active-link',
   },
-
   step: {
-    stepActive: 'step-active'
+    stepActive: 'step-active',
+  },
+  grid: {
+    selectedCell: 'selected-cell',
   }
+};
+
+export const globalValue = {
+  selectedCell: [],
+  grid: [
+    [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
+    [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
+    [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
+    [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
+    [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
+    [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
+    [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
+    [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
+    [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
+    [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
+  ],
 };
