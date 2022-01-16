@@ -41,6 +41,8 @@ export const classNames = {
   },
   grid: {
     selectedCell: 'selected-cell',
+    starCell: 'start-cell',
+    endCell: 'end-cell',
   }
 };
 
@@ -58,4 +60,6 @@ export const globalValue = {
     [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
     [{ state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }, { state: 'block' }],
   ],
+  start: [],
+  end: [],
 };

@@ -1,6 +1,7 @@
 import { select, classNames } from './settings.js';
 import drawRoutes from './components/drawRoutes.js';
 import selectStartAndEnd from './components/selectStartAndEnd.js';
+import compute from './components/compute.js';
 
 const app = {
   initPages: function () {
@@ -58,7 +59,7 @@ const app = {
     thisApp.drawRoutes = new drawRoutes(finderWrapper);
   },
 
-  InitStartAndEnd: function () {
+  initStartAndEnd: function () {
     const thisApp = this;
 
     const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
@@ -66,12 +67,21 @@ const app = {
     thisApp.selectStartAndEnd = new selectStartAndEnd(finderWrapper);
   },
 
+  initCompute: function () {
+    const thisApp = this;
+
+    const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
+    
+    thisApp.compute = new compute(finderWrapper);
+  },
+
   init: function () {
     const thisApp = this;
 
     thisApp.initPages();
     thisApp.initDrawRoutes();
-    thisApp.InitStartAndEnd();
+    thisApp.initStartAndEnd();
+    thisApp.initCompute();
 
   }
 };
