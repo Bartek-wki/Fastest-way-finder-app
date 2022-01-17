@@ -37,48 +37,52 @@ class selectStartAndEnd {
     thisSelect.dom.buttonTwoWrapper.classList.add(classNames.step.stepActive);
     thisSelect.dom.headerTwoWrapper.classList.add(classNames.step.stepActive);
 
-    thisSelect.selectStartEnd();
+    thisSelect.getData();
   }
 
-  selectStartEnd() {
+  getData() {
     const thisSelect = this;
 
-    const startEnd = [];
+    thisSelect.startAndEnd = [];
 
     if (thisSelect.dom.headerTwoWrapper.classList.contains(classNames.step.stepActive)) {
       thisSelect.dom.grid.addEventListener('click', function () {
         const clickedElement = event.target;
 
-        const cellId = clickedElement.getAttribute('id');
-        let cellCol = clickedElement.getAttribute('col');
-        cellCol = parseInt(cellCol);
-        let cellRow = clickedElement.getAttribute('row');
-        cellRow = parseInt(cellRow);
-        const indexOfCell = startEnd.indexOf(cellId);
+        thisSelect.cellId = clickedElement.getAttribute('id');
+        thisSelect.cellCol = clickedElement.getAttribute('col');
+        thisSelect.cellCol = parseInt(thisSelect.cellCol);
+        thisSelect.cellRow = clickedElement.getAttribute('row');
+        thisSelect.cellRow = parseInt(thisSelect.cellRow);
+        thisSelect.indexOfCell = thisSelect.startAndEnd.indexOf(thisSelect.cellId);
 
-        if (startEnd.length == 0
-          && clickedElement.classList.contains(classNames.grid.selectedCell)) {
-          clickedElement.classList.add(classNames.grid.starCell);
-        
-          startEnd.push(cellId);
-        
-          globalValue.start.push(cellRow, cellCol);
-        
-          console.log(globalValue.start);
-        } else if (startEnd.length == 1
-          && clickedElement.classList.contains(classNames.grid.selectedCell)
-          && indexOfCell == -1) {
-          clickedElement.classList.add(classNames.grid.endCell);
-        
-          startEnd.push(cellId);
-        
-          globalValue.end.push(cellRow, cellCol);
-
-          changeGrid.addGoal(cellRow, cellCol);
-        
-          console.log(globalValue.end);
-        }
+        thisSelect.selectStartEnd();
       });
+    }
+  }
+
+  selectStartEnd() {
+    const thisSelect = this;
+    const clickedElement = event.target;
+
+    if (thisSelect.startAndEnd.length == 0
+      && clickedElement.classList.contains(classNames.grid.selectedCell)) {
+      clickedElement.classList.add(classNames.grid.starCell);
+    
+      thisSelect.startAndEnd.push(thisSelect.cellId);
+    
+      globalValue.start.push(thisSelect.cellRow, thisSelect.cellCol);
+    
+    } else if (thisSelect.startAndEnd.length == 1
+      && clickedElement.classList.contains(classNames.grid.selectedCell)
+      && thisSelect.indexOfCell == -1) {
+      clickedElement.classList.add(classNames.grid.endCell);
+    
+      thisSelect.startAndEnd.push(thisSelect.cellId);
+    
+      globalValue.end.push(thisSelect.cellRow, thisSelect.cellCol);
+
+      changeGrid.addGoal(thisSelect.cellRow, thisSelect.cellCol);
     }
   }
 }

@@ -21,6 +21,8 @@ export const select = {
     grid: '.grid',
     cell: '.cell',
     selectedCell: '.selected-cell',
+    startCell: '.start-cell',
+    endCell: '.end-cell',
   },
   buttons: {
     finishDrawing: '#button-one',

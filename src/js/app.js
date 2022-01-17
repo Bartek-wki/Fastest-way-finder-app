@@ -2,6 +2,7 @@ import { select, classNames } from './settings.js';
 import drawRoutes from './components/drawRoutes.js';
 import selectStartAndEnd from './components/selectStartAndEnd.js';
 import compute from './components/compute.js';
+import startAgain from './components/startAgain.js';
 
 const app = {
   initPages: function () {
@@ -75,6 +76,14 @@ const app = {
     thisApp.compute = new compute(finderWrapper);
   },
 
+  initStartAgain: function () {
+    const thisApp = this;
+
+    const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
+    
+    thisApp.startAgain = new startAgain(finderWrapper);
+  },
+
   init: function () {
     const thisApp = this;
 
@@ -82,6 +91,7 @@ const app = {
     thisApp.initDrawRoutes();
     thisApp.initStartAndEnd();
     thisApp.initCompute();
+    thisApp.initStartAgain();
 
   }
 };

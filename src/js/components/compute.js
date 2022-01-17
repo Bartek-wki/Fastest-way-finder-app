@@ -48,8 +48,7 @@ class compute {
     let row = grid.length;
     let col = grid[0].length;
 
-    //function to judge if a cell is safe or not
-    var safeNeighbor = function (r, c) {
+    const safeNeighbor = function (r, c) {
       if (r < 0 || r >= row) return false;
       if (c < 0 || c >= col) return false;
       if (grid[r][c].state == 'block') return false;
@@ -57,8 +56,7 @@ class compute {
       return true;
     };
 
-    //function to identify neighbors of current location
-    var exploreLocation = function (location) {
+    const exploreLocation = function (location) {
       let r = location.r;
       let c = location.c;
       let allNeighbors = [];
@@ -74,8 +72,7 @@ class compute {
       return allNeighbors;
     };
 
-    //find path between two cells
-    var findPath = function () {
+    const findPath = function () {
       var location = {
         r: start[0],
         c: start[1],
@@ -100,8 +97,7 @@ class compute {
       return false;
     };
 
-    //Code to traverse, and print path of route
-    var printPath = function (path) {
+    const printPath = function (path) {
       let paths = [path];
       /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
       while (true) {

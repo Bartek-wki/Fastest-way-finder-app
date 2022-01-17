@@ -29,62 +29,84 @@ class drawRoutes {
   initAction() {
     const thisDrawRoutes = this;
 
-    thisDrawRoutes.dom.grid.addEventListener('click', thisDrawRoutes.selectCell);
+    thisDrawRoutes.dom.grid.addEventListener('click', function () {
+      thisDrawRoutes.getData();
+    });
   }
 
-  selectCell() {
+  getData() {
+    const thisDrawRoutes = this;
+
     const activeHeader = document.querySelector(select.containerOf.headers.stepOne);
     
     if (activeHeader.classList.contains(classNames.step.stepActive)) {
       const clickedElement = event.target;
       event.preventDefault();
 
-      let cellId = clickedElement.getAttribute('id');
-      cellId = parseInt(cellId);
+      thisDrawRoutes.cellId = clickedElement.getAttribute('id');
+      thisDrawRoutes.cellId = parseInt(thisDrawRoutes.cellId);
 
-      const indexOfCellId = globalValue.selectedCell.indexOf(cellId);
-      const indexOfLeftNeighbor = globalValue.selectedCell.indexOf(cellId - 1);
-      const indexOfUpperNeighbor = globalValue.selectedCell.indexOf(cellId - 10);
-      const indexOfRightNeighbor = globalValue.selectedCell.indexOf(cellId + 1);
-      const indexOfLowerNeighbor = globalValue.selectedCell.indexOf(cellId + 10);
-      const neighbors = [];
-      const activeNeighbors = [];
+      thisDrawRoutes.indexOfCellId = globalValue.selectedCell.indexOf(thisDrawRoutes.cellId);
+      thisDrawRoutes.indexOfLeftNeighbor = globalValue.selectedCell.indexOf(thisDrawRoutes.cellId - 1);
+      thisDrawRoutes.indexOfUpperNeighbor = globalValue.selectedCell.indexOf(thisDrawRoutes.cellId - 10);
+      thisDrawRoutes.indexOfRightNeighbor = globalValue.selectedCell.indexOf(thisDrawRoutes.cellId + 1);
+      thisDrawRoutes.indexOfLowerNeighbor = globalValue.selectedCell.indexOf(thisDrawRoutes.cellId + 10);
+      thisDrawRoutes.cellCol = clickedElement.getAttribute('col');
+      thisDrawRoutes.cellRow = clickedElement.getAttribute('row');
 
-      const col = clickedElement.getAttribute('col');
-      const row = clickedElement.getAttribute('row');
-      
-      neighbors.push((cellId - 1), (cellId - 10), (cellId + 1), (cellId + 10));
+      thisDrawRoutes.selectCell();
+    }
+  }
 
-      for (let neighbor of neighbors) {
-        const cell = document.querySelector('div[id="' + neighbor + '"]');
+  checkNeighbors() {
+    const thisDrawRoutes = this;
 
-        if (cell.classList.contains(classNames.grid.selectedCell)) {
-          activeNeighbors.push(neighbor);
-        }
-      }
+    thisDrawRoutes.neighbors = [];
+    thisDrawRoutes.activeNeighbors = [];
 
+    thisDrawRoutes.neighbors.push((thisDrawRoutes.cellId - 1),
+      (thisDrawRoutes.cellId - 10),
+      (thisDrawRoutes.cellId + 1),
+      (thisDrawRoutes.cellId + 10));
 
-      if (indexOfCellId == -1
-        && (globalValue.selectedCell.length == 0
-        || indexOfLeftNeighbor !== -1
-        || indexOfUpperNeighbor !== -1
-        || indexOfRightNeighbor !== -1
-        || indexOfLowerNeighbor !== -1)) {
-        globalValue.selectedCell.push(cellId);
+    for (let neighbor of thisDrawRoutes.neighbors) {
+      const cell = document.querySelector('div[id="' + neighbor + '"]');
 
-        clickedElement.classList.add(classNames.grid.selectedCell);
-
-        changeGrid.addToGrid(row, col);
-      } else if (indexOfCellId !== -1 && activeNeighbors.length <= 1) {
-        globalValue.selectedCell.splice(indexOfCellId, 1);
-        
-        clickedElement.classList.remove(classNames.grid.selectedCell);
-
-        changeGrid.removeFromGrid(row, col);
-      } else {
-        alert('This cell cannot be selected');
+      if (cell.classList.contains(classNames.grid.selectedCell)) {
+        thisDrawRoutes.activeNeighbors.push(neighbor);
       }
     }
+
+    return thisDrawRoutes.activeNeighbors.length;
+  }
+
+  selectCell() {
+    const thisDrawRoutes = this;
+    const clickedElement = event.target;
+
+    if (thisDrawRoutes.indexOfCellId == -1
+      && (globalValue.selectedCell.length == 0
+        || thisDrawRoutes.indexOfLeftNeighbor !== -1
+        || thisDrawRoutes.indexOfUpperNeighbor !== -1
+        || thisDrawRoutes.indexOfRightNeighbor !== -1
+        || thisDrawRoutes.indexOfLowerNeighbor !== -1)) {
+      globalValue.selectedCell.push(thisDrawRoutes.cellId);
+
+      clickedElement.classList.add(classNames.grid.selectedCell);
+
+      changeGrid.addToGrid(thisDrawRoutes.cellRow, thisDrawRoutes.cellCol);
+
+      
+    } else if (thisDrawRoutes.indexOfCellId !== -1 && thisDrawRoutes.checkNeighbors() <= 1) {
+      globalValue.selectedCell.splice(thisDrawRoutes.indexOfCellId, 1);
+    
+      clickedElement.classList.remove(classNames.grid.selectedCell);
+
+      changeGrid.removeFromGrid(thisDrawRoutes.cellRow, thisDrawRoutes.cellCol);
+    } else {
+      alert('This cell cannot be selected');
+    }
+    console.log(globalValue.selectedCell);
   }
 }
 
