@@ -2,14 +2,14 @@ import { globalValue } from '../settings.js';
 
 export const changeGrid = {}; // eslint-disable-line no-unused-vars
 
-changeGrid.addToGrid = function (col, row) {
-  globalValue.grid[col][row].state = 'empty';
+changeGrid.addToGrid = function (row, col) {
+  globalValue.grid[row][col].state = 'empty';
 }; 
 
-changeGrid.removeFromGrid = function (col, row) {
-  globalValue.grid[col][row].state = 'block';
+changeGrid.removeFromGrid = function (row, col) {
+  globalValue.grid[row][col].state = 'block';
 };
 
-changeGrid.addGoal = function (col, row) {
-  globalValue.grid[col][row].state = 'goal';
+changeGrid.addGoal = function (row, col) {
+  globalValue.grid[row][col].state = 'goal';
 };

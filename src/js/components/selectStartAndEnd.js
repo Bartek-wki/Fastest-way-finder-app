@@ -62,7 +62,7 @@ class selectStartAndEnd {
         
           startEnd.push(cellId);
         
-          globalValue.start.push(cellCol, cellRow);
+          globalValue.start.push(cellRow, cellCol);
         
           console.log(globalValue.start);
         } else if (startEnd.length == 1
@@ -72,9 +72,9 @@ class selectStartAndEnd {
         
           startEnd.push(cellId);
         
-          globalValue.end.push(cellCol, cellRow);
+          globalValue.end.push(cellRow, cellCol);
 
-          changeGrid.addGoal(cellCol, cellRow);
+          changeGrid.addGoal(cellRow, cellCol);
         
           console.log(globalValue.end);
         }

@@ -42,8 +42,6 @@ class compute {
   }
 
   computeRoutes() {
-    const thisCompute = this;
-
     let grid = globalValue.grid;
     let start = globalValue.start;
     let end = globalValue.end;
@@ -118,7 +116,7 @@ class compute {
       console.log(paths);
       for (let path of paths) {
         console.log(path);
-        const findCell = document.querySelector('div[col="' + path.r + '"][row="' + path.c + '"]');
+        const findCell = document.querySelector('div[row="' + path.r + '"][col="' + path.c + '"]');
         findCell.classList.add(classNames.grid.starCell);
       }
     };
