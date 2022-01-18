@@ -13,3 +13,12 @@ changeGrid.removeFromGrid = function (row, col) {
 changeGrid.addGoal = function (row, col) {
   globalValue.grid[row][col].state = 'goal';
 };
+
+changeGrid.restartGrid = function () {
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      delete globalValue.grid[row][col].parent;
+      globalValue.grid[row][col].state = 'block';
+    }
+  }
+};

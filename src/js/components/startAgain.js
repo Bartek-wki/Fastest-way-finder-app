@@ -1,5 +1,6 @@
 import { select, classNames, globalValue } from '../settings.js';
 import { changeGrid } from './changeGrid.js';
+//import { changeGrid } from './changeGrid.js';
 
 class startAgain {
   constructor(element) {
@@ -62,6 +63,8 @@ class startAgain {
     globalValue.selectedCell = [];
     globalValue.start = [];
     globalValue.end = [];
+
+    changeGrid.restartGrid();
   }
 
 }

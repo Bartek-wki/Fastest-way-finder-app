@@ -109,9 +109,7 @@ class compute {
         paths.push(parent);
         path = { r: parent.r, c: parent.c };
       }
-      console.log(paths);
       for (let path of paths) {
-        console.log(path);
         const findCell = document.querySelector('div[row="' + path.r + '"][col="' + path.c + '"]');
         findCell.classList.add(classNames.grid.starCell);
       }

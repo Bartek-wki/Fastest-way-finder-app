@@ -106,7 +106,6 @@ class drawRoutes {
     } else {
       alert('This cell cannot be selected');
     }
-    console.log(globalValue.selectedCell);
   }
 }
 
