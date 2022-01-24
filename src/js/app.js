@@ -1,5 +1,5 @@
 import { select, classNames } from './settings.js';
-import drawRoutes from './components/drawRoutes.js';
+import DrawRoutes from './components/drawRoutes.js';
 import selectStartAndEnd from './components/selectStartAndEnd.js';
 import compute from './components/compute.js';
 import startAgain from './components/startAgain.js';
@@ -59,14 +59,13 @@ const app = {
     const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
     
     thisApp.grid = new Grid(finderWrapper);
-    console.log(thisApp.grid);
   },
 
   initDrawRoutes: function () {
     const thisApp = this;
     const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
     
-    thisApp.drawRoutes = new drawRoutes(finderWrapper);
+    thisApp.drawRoutes = new DrawRoutes(finderWrapper, thisApp.grid.grid);
   },
 
   initStartAndEnd: function () {
@@ -98,7 +97,14 @@ const app = {
 
     thisApp.initPages();
     thisApp.initGrid();
-    thisApp.initDrawRoutes();
+    
+    if (thisApp.navLinks[1].classList.contains(classNames.nav.active)) {
+      thisApp.initDrawRoutes();
+    } else {
+      thisApp.navLinks[1].addEventListener('click', function () {
+        thisApp.initDrawRoutes();
+      });
+    }
     thisApp.initStartAndEnd();
     thisApp.initCompute();
     thisApp.initStartAgain();

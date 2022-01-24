@@ -1,31 +1,39 @@
-import { select, globalValue, classNames } from '../settings.js';
+import { select, globalValue, classNames, templates, handlebarsData } from '../settings.js';
 import { changeGrid } from './changeGrid.js';
-import Grid from './Grid.js';
+import { utils } from '../utils.js';
 
-class drawRoutes {
-  constructor(element) {
+class DrawRoutes {
+  constructor(element, grid) {
     const thisDrawRoutes = this;
-    
-    thisDrawRoutes.getElement(element);
-    thisDrawRoutes.activeDrawRoutes();
+
+    thisDrawRoutes.getElement(element, grid);
+    thisDrawRoutes.renderElement();
     thisDrawRoutes.initAction();
-    console.log(Grid);
 
   }
 
-  getElement(element) {
+  getElement(element, grid) {
     const thisDrawRoutes = this;
 
     thisDrawRoutes.dom = {};
 
-    thisDrawRoutes.dom.grid = element.querySelector(select.grid.grid);
-    thisDrawRoutes.dom.headerOne = element.querySelector(select.containerOf.headers.stepOne);
+    thisDrawRoutes.dom.grid = grid;
   }
 
-  activeDrawRoutes() {
+  renderElement() {
     const thisDrawRoutes = this;
 
-    thisDrawRoutes.dom.headerOne.classList.add(classNames.step.stepActive);
+    // render header one
+    const generatedHeaderHTML = templates.header(handlebarsData.headerOne);
+    thisDrawRoutes.headerOne = utils.createDOMFromHTML(generatedHeaderHTML);
+    const headerWrapper = document.querySelector(select.containerOf.header);
+    headerWrapper.appendChild(thisDrawRoutes.headerOne);
+
+    // render button one
+    const generatedButtonHTML = templates.button(handlebarsData.buttonOne);
+    thisDrawRoutes.buttonOne = utils.createDOMFromHTML(generatedButtonHTML);
+    const buttonWrapper = document.querySelector(select.containerOf.button);
+    buttonWrapper.appendChild(thisDrawRoutes.buttonOne);
   }
 
   initAction() {
@@ -111,4 +119,4 @@ class drawRoutes {
   }
 }
 
-export default drawRoutes;
+export default DrawRoutes;

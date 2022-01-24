@@ -109,40 +109,12 @@
       <section id="finder" class="">
         <div class="finder-wrapper">
           <div class="container step-wrapper">
-            <div id="header-one-wrapper" class="step-header">
-              <h5>
-                DRAW ROUTES
-              </h5>
-            </div>
-            <div id="header-two-wrapper" class="step-header">
-              <h5>
-                PICK START AND FINISH
-              </h5>
-            </div>
-            <div id="header-three-wrapper" class="step-header">
-              <h5>
-                THE BEST ROUTE IS...
-              </h5>
-            </div>
           </div>
           <div class="container d-flex justify-content-center">
             <div class="grid">
             </div>
           </div>
-          <div id="button-one-wrapper" class="container step-button step-active">
-            <button type="button" id="button-one" class="btn btn-primary btn-lg">
-                FINISH DRAWING
-            </button>
-          </div>
-          <div id="button-two-wrapper" class="container step-button">
-            <button type="button" id="button-two" class="btn btn-primary btn-lg">
-                COMPUTE
-            </button>
-          </div>
-          <div id="button-three-wrapper" class="container step-button">
-            <button type="button" id="button-three" class="btn btn-primary btn-lg">
-                START AGAIN
-            </button>
+          <div id="button-wrapper" class="container step-button step-active">
           </div>
         </div>
         <div class="container d-flex justify-content-center">
@@ -152,9 +124,6 @@
         </div>
       </section>
     </div>
-
-
-
     <div class="footer container d-flex justify-content-center">
       <div class="row">
         <div class="col">
@@ -167,8 +136,22 @@
   </section>
 
   <script id="template-grid" type="text/x-handlebars-template">
-    <div id="{{ cellId }}" class="cell" row="{{ cellRow }}" col="{{ cellCol }}">
+    <div id="{{ cellId }}" class="cell" row="{{ cellRow }}" col="{{ cellCol }}"></div>
   </script>
+
+  <script id="template-header" type="text/x-handlebars-template">
+        <div id="{{ headerId }}" class="step-header">
+          <h5>
+            {{ headerTitle }}
+          </h5>
+      </div> 
+  </script>
+
+  <script id="template-button" type="text/x-handlebars-template">
+          <button type="button" id="{{ buttonId }}" class="btn btn-primary btn-lg">
+            {{ buttonTitle }}
+          </button>
+    </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

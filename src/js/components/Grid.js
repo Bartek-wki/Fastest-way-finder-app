@@ -1,4 +1,4 @@
-import { select, globalValue, classNames, templates } from '../settings.js';
+import { select, templates } from '../settings.js';
 import { utils } from '../utils.js';
 
 class Grid {
@@ -7,6 +7,10 @@ class Grid {
 
     thisGrid.initGrid();
     thisGrid.renderGrid();
+
+    thisGrid.start = [];
+    thisGrid.end = [];
+    console.log(thisGrid);
   }
 
   initGrid() {
@@ -49,6 +53,7 @@ class Grid {
       }
     }
   }
+
 
 }
 

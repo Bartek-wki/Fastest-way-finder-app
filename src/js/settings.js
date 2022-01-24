@@ -1,6 +1,8 @@
 export const select = {
   templateOf: {
     grid: '#template-grid',
+    header: '#template-header',
+    button: '#template-button',
   },
   containerOf: {
     pages: '#pages',
@@ -10,13 +12,10 @@ export const select = {
       compute: '#button-two-wrapper',
       startAgain: '#button-three-wrapper',
     },
-    headers: {
-      stepOne: '#header-one-wrapper',
-      stepTwo: '#header-two-wrapper',
-      stepThree: '#header-three-wrapper',
-    },
+    header: '.step-wrapper',
     finderWrapper: '.finder-wrapper',
     grid: '.grid',
+    button: '#button-wrapper'
   },
   nav: {
     links: '.nav-link',
@@ -72,4 +71,33 @@ export const globalValue = {
 
 export const templates = {
   grid: Handlebars.compile(document.querySelector(select.templateOf.grid).innerHTML),
+  header: Handlebars.compile(document.querySelector(select.templateOf.header).innerHTML),
+  button: Handlebars.compile(document.querySelector(select.templateOf.button).innerHTML),
+};
+
+export const handlebarsData = {
+  headerOne: {
+    headerId: 'header-one',
+    headerTitle: 'DRAW ROUTES'
+  },
+  headerTwo: {
+    headerId: 'header-two',
+    headerTitle: 'PICK START AND FINISH'
+  },
+  headerThree: {
+    headerId: 'header-three',
+    headerTitle: 'THE BEST ROUTE IS...'
+  },
+  buttonOne: {
+    buttonId: 'button-one',
+    buttonTitle: 'FINISH DRAWING'
+  },
+  buttonTwo: {
+    buttonId: 'button-two',
+    buttonTitle: 'COMPUTE'
+  },
+  buttonThree: {
+    buttonId: 'button-three',
+    buttonTitle: 'START AGAIN'
+  },
 };
