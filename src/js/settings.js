@@ -1,4 +1,7 @@
 export const select = {
+  templateOf: {
+    grid: '#template-grid',
+  },
   containerOf: {
     pages: '#pages',
     stepHeader: '.step-header',
@@ -13,6 +16,7 @@ export const select = {
       stepThree: '#header-three-wrapper',
     },
     finderWrapper: '.finder-wrapper',
+    grid: '.grid',
   },
   nav: {
     links: '.nav-link',
@@ -64,4 +68,8 @@ export const globalValue = {
   ],
   start: [],
   end: [],
+};
+
+export const templates = {
+  grid: Handlebars.compile(document.querySelector(select.templateOf.grid).innerHTML),
 };

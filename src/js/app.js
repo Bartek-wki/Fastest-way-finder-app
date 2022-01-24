@@ -3,6 +3,7 @@ import drawRoutes from './components/drawRoutes.js';
 import selectStartAndEnd from './components/selectStartAndEnd.js';
 import compute from './components/compute.js';
 import startAgain from './components/startAgain.js';
+import Grid from './components/Grid.js';
 
 const app = {
   initPages: function () {
@@ -53,6 +54,14 @@ const app = {
     }
   },
 
+  initGrid: function () {
+    const thisApp = this;
+    const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
+    
+    thisApp.grid = new Grid(finderWrapper);
+    console.log(thisApp.grid);
+  },
+
   initDrawRoutes: function () {
     const thisApp = this;
     const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
@@ -88,6 +97,7 @@ const app = {
     const thisApp = this;
 
     thisApp.initPages();
+    thisApp.initGrid();
     thisApp.initDrawRoutes();
     thisApp.initStartAndEnd();
     thisApp.initCompute();

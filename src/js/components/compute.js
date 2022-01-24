@@ -60,6 +60,7 @@ class compute {
       let r = location.r;
       let c = location.c;
       let allNeighbors = [];
+
       //left
       if (safeNeighbor(r, c - 1)) allNeighbors.push({ r: r, c: c - 1 });
       //right
@@ -81,16 +82,18 @@ class compute {
       queue.push(location);
       while (queue.length) {
         var currentLocation = queue.shift();
+
         if (currentLocation.r == end[0] && currentLocation.c == end[1])
           return currentLocation;
         grid[currentLocation.r][currentLocation.c].state = 'visited';
         var neighbors = exploreLocation(currentLocation);
+
         for (let neighbor of neighbors)
         {
           if(grid[neighbor.r][neighbor.c].state != 'visited')
           {
             queue.push(neighbor);
-            grid[neighbor.r][neighbor.c]['parent']=currentLocation;
+            grid[neighbor.r][neighbor.c]['parent'] = currentLocation;
           }
         }
       }
@@ -114,6 +117,8 @@ class compute {
         findCell.classList.add(classNames.grid.starCell);
       }
     };
+
+    
 
     let path = findPath();
     printPath(path);

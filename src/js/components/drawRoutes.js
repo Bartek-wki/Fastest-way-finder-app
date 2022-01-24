@@ -1,5 +1,6 @@
 import { select, globalValue, classNames } from '../settings.js';
 import { changeGrid } from './changeGrid.js';
+import Grid from './Grid.js';
 
 class drawRoutes {
   constructor(element) {
@@ -8,6 +9,7 @@ class drawRoutes {
     thisDrawRoutes.getElement(element);
     thisDrawRoutes.activeDrawRoutes();
     thisDrawRoutes.initAction();
+    console.log(Grid);
 
   }
 
