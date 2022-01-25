@@ -10,7 +10,7 @@ class Grid {
 
     thisGrid.start = [];
     thisGrid.end = [];
-    console.log(thisGrid);
+    thisGrid.selectedCells = [];
   }
 
   initGrid() {

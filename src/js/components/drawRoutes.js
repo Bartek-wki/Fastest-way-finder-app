@@ -1,24 +1,17 @@
-import { select, globalValue, classNames, templates, handlebarsData } from '../settings.js';
-import { changeGrid } from './changeGrid.js';
+import { select, classNames, templates, handlebarsData } from '../settings.js';
 import { utils } from '../utils.js';
 
 class DrawRoutes {
-  constructor(element, grid) {
+  constructor(element, grid, selectedCells, activeStep) {
     const thisDrawRoutes = this;
-
-    thisDrawRoutes.getElement(element, grid);
+    
     thisDrawRoutes.renderElement();
-    thisDrawRoutes.initAction();
-
+    thisDrawRoutes.getElement(element, grid);
+    thisDrawRoutes.initAction(element, selectedCells, grid, activeStep);
+    console.log(activeStep);
   }
 
-  getElement(element, grid) {
-    const thisDrawRoutes = this;
-
-    thisDrawRoutes.dom = {};
-
-    thisDrawRoutes.dom.grid = grid;
-  }
+  
 
   renderElement() {
     const thisDrawRoutes = this;
@@ -36,85 +29,113 @@ class DrawRoutes {
     buttonWrapper.appendChild(thisDrawRoutes.buttonOne);
   }
 
-  initAction() {
+  getElement(element, grid) {
     const thisDrawRoutes = this;
 
+    thisDrawRoutes.dom = {};
+
+    thisDrawRoutes.dom.grid = element.querySelector(select.containerOf.grid);
+    //thisDrawRoutes.dom.buttonOne = element.querySelector(select.buttons.finishDrawing);
+  }
+
+  initAction(element, selectedCells, grid, activeStep) {
+    const thisDrawRoutes = this;
     thisDrawRoutes.dom.grid.addEventListener('click', function () {
-      thisDrawRoutes.getData();
+      if (activeStep == 1) {
+        const data = thisDrawRoutes.getData();
+        if (thisDrawRoutes.checkIsCellSelected(data.cellId, selectedCells)) {
+          thisDrawRoutes.selectCell(data, selectedCells, grid);
+        } else if (!thisDrawRoutes.checkIsCellSelected(data.cellId, selectedCells)) {
+          thisDrawRoutes.unselectCell(data, selectedCells, grid);
+        }
+      }
+      console.log(grid, selectedCells);
     });
+    thisDrawRoutes.buttonOne.addEventListener('click', function () {
+      activeStep = 2;
+    });
+    console.log(thisDrawRoutes.buttonOne);
   }
 
   getData() {
-    const thisDrawRoutes = this;
+    const clickedElement = event.target;
+    event.preventDefault();
 
-    const activeHeader = document.querySelector(select.containerOf.headers.stepOne);
-    
-    if (activeHeader.classList.contains(classNames.step.stepActive)) {
-      const clickedElement = event.target;
-      event.preventDefault();
+    const cellData = {
+      cellId: parseInt(clickedElement.getAttribute('id')),
+      cellCol: clickedElement.getAttribute('col'),
+      cellRow: clickedElement.getAttribute('row'),
+    };
+    return cellData;
+  }
 
-      thisDrawRoutes.cellId = clickedElement.getAttribute('id');
-      thisDrawRoutes.cellId = parseInt(thisDrawRoutes.cellId);
+  checkIsCellSelected(cellId, selectedCells) {
+    const indexOfCellId = selectedCells.indexOf(cellId);
 
-      thisDrawRoutes.indexOfCellId = globalValue.selectedCell.indexOf(thisDrawRoutes.cellId);
-      thisDrawRoutes.indexOfLeftNeighbor = globalValue.selectedCell.indexOf(thisDrawRoutes.cellId - 1);
-      thisDrawRoutes.indexOfUpperNeighbor = globalValue.selectedCell.indexOf(thisDrawRoutes.cellId - 10);
-      thisDrawRoutes.indexOfRightNeighbor = globalValue.selectedCell.indexOf(thisDrawRoutes.cellId + 1);
-      thisDrawRoutes.indexOfLowerNeighbor = globalValue.selectedCell.indexOf(thisDrawRoutes.cellId + 10);
-      thisDrawRoutes.cellCol = clickedElement.getAttribute('col');
-      thisDrawRoutes.cellRow = clickedElement.getAttribute('row');
-
-      thisDrawRoutes.selectCell();
+    if (indexOfCellId == -1) {
+      return true;
     }
   }
 
-  checkNeighbors() {
-    const thisDrawRoutes = this;
-
-    thisDrawRoutes.neighbors = [];
-    thisDrawRoutes.activeNeighbors = [];
-
-    thisDrawRoutes.neighbors.push((thisDrawRoutes.cellId - 1),
-      (thisDrawRoutes.cellId - 10),
-      (thisDrawRoutes.cellId + 1),
-      (thisDrawRoutes.cellId + 10));
-
-    for (let neighbor of thisDrawRoutes.neighbors) {
-      const cell = document.querySelector('div[id="' + neighbor + '"]');
-
-      if (cell.classList.contains(classNames.grid.selectedCell)) {
-        thisDrawRoutes.activeNeighbors.push(neighbor);
-      }
+  checkActiveNeighbors(cellId, selectedCells) {
+    if (selectedCells.indexOf(cellId - 1) !== -1
+      || selectedCells.indexOf(cellId + 1) !== -1
+      || selectedCells.indexOf(cellId - 10) !== -1
+      || selectedCells.indexOf(cellId + 10) !== -1) {
+      return true;
     }
-
-    return thisDrawRoutes.activeNeighbors.length;
   }
 
-  selectCell() {
+  findActiveNeighbors(cellId, selectedCells) {
+    const activeNeighbors = [];
+    console.log(cellId);
+    console.log(cellId - 10);
+
+    if (selectedCells.indexOf(cellId - 1) !== -1) {
+      activeNeighbors.push(cellId - 1);
+    }
+    if (selectedCells.indexOf(cellId + 1) !== -1) {
+      activeNeighbors.push(cellId + 1);
+    }
+    if (selectedCells.indexOf(cellId - 10) !== -1) {
+      activeNeighbors.push(cellId - 10);
+    }
+    if (selectedCells.indexOf(cellId + 10) !== -1) {
+      activeNeighbors.push(cellId + 10);
+    }
+    console.log(activeNeighbors);
+    return activeNeighbors;
+  }
+
+  selectCell(data, selectedCells, grid) {
     const thisDrawRoutes = this;
     const clickedElement = event.target;
 
-    if (thisDrawRoutes.indexOfCellId == -1
-      && (globalValue.selectedCell.length == 0
-        || thisDrawRoutes.indexOfLeftNeighbor !== -1
-        || thisDrawRoutes.indexOfUpperNeighbor !== -1
-        || thisDrawRoutes.indexOfRightNeighbor !== -1
-        || thisDrawRoutes.indexOfLowerNeighbor !== -1)) {
-      globalValue.selectedCell.push(thisDrawRoutes.cellId);
+    if (selectedCells.length == 0
+      || thisDrawRoutes.checkActiveNeighbors(data.cellId, selectedCells)) {
+      selectedCells.push(data.cellId);
 
       clickedElement.classList.add(classNames.grid.selectedCell);
 
-      changeGrid.addToGrid(thisDrawRoutes.cellRow, thisDrawRoutes.cellCol);
+      grid[data.cellRow][data.cellCol].state = 'empty';   
+    } else {
+      alert('This cell cannot be selected');
+    }
+  }
 
-      
-    } else if (thisDrawRoutes.indexOfCellId !== -1 && thisDrawRoutes.checkNeighbors() <= 1) {
-      globalValue.selectedCell.splice(thisDrawRoutes.indexOfCellId, 1);
+  unselectCell(data, selectedCells, grid) {
+    const thisDrawRoutes = this;
+    const clickedElement = event.target;
+
+    if (thisDrawRoutes.findActiveNeighbors(data.cellId, selectedCells).length <= 1) {
+      const indexOfCellId = selectedCells.indexOf(data.cellId);
+      selectedCells.splice(indexOfCellId, 1);
     
       clickedElement.classList.remove(classNames.grid.selectedCell);
 
-      changeGrid.removeFromGrid(thisDrawRoutes.cellRow, thisDrawRoutes.cellCol);
+      grid[data.cellRow][data.cellCol].state = 'block';
     } else {
-      alert('This cell cannot be selected');
+      alert('This cell cannot be unselected');
     }
   }
 }

@@ -54,6 +54,11 @@ const app = {
     }
   },
 
+  activateStep: function () {
+    const thisApp = this;
+    thisApp.activStep = 1;
+  },
+
   initGrid: function () {
     const thisApp = this;
     const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
@@ -65,7 +70,7 @@ const app = {
     const thisApp = this;
     const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
     
-    thisApp.drawRoutes = new DrawRoutes(finderWrapper, thisApp.grid.grid);
+    thisApp.drawRoutes = new DrawRoutes(finderWrapper, thisApp.grid.grid, thisApp.grid.selectedCells, thisApp.activStep);
   },
 
   initStartAndEnd: function () {
@@ -99,9 +104,11 @@ const app = {
     thisApp.initGrid();
     
     if (thisApp.navLinks[1].classList.contains(classNames.nav.active)) {
+      thisApp.activateStep();
       thisApp.initDrawRoutes();
     } else {
       thisApp.navLinks[1].addEventListener('click', function () {
+        thisApp.activateStep();
         thisApp.initDrawRoutes();
       });
     }
