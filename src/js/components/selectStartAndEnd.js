@@ -1,90 +1,94 @@
-import { select, classNames, globalValue } from '../settings.js';
-import { changeGrid } from './changeGrid.js';
+import { select, classNames, handlebarsData } from '../settings.js';
+import RenderElement from './RenderElement.js';
 
-class selectStartAndEnd {
-  constructor(element) {
+class SelectStartAndEnd {
+  constructor(element, grid, start, end, selectedCells, activeStep) {
+    console.log(start, end, selectedCells, activeStep);
     const thisSelect = this;
+
+    thisSelect.renderElement();
     thisSelect.getElement(element);
-    thisSelect.initAction();
+    thisSelect.initAction(selectedCells, grid, start, end, activeStep);
+  }
+
+  renderElement() {
+    new RenderElement(handlebarsData.headerTwo, handlebarsData.buttonTwo);
   }
 
   getElement(element) {
     const thisSelect = this;
 
-    thisSelect.dom = {};
-
-    thisSelect.dom.grid = element.querySelector(select.grid.grid);
-    thisSelect.dom.buttonOneWrapper = element.querySelector(select.containerOf.buttons.finishDrawing);
-    thisSelect.dom.buttonTwoWrapper = element.querySelector(select.containerOf.buttons.compute);
-    thisSelect.dom.headerOneWrapper = element.querySelector(select.containerOf.headers.stepOne);
-    thisSelect.dom.headerTwoWrapper = element.querySelector(select.containerOf.headers.stepTwo);
-    thisSelect.dom.buttonOne = element.querySelector(select.buttons.finishDrawing);
+    thisSelect.dom = {
+      grid: element.querySelector(select.containerOf.grid),
+      headerTwo: element.querySelector(select.containerOf.stepHeader),
+      buttonTwo: element.querySelector(select.buttons.compute),
+    };
   }
 
-  initAction() {
+  initAction(selectedCells, grid, start, end, activeStep) {
     const thisSelect = this;
 
-    thisSelect.dom.buttonOne.addEventListener('click', function () {
-      thisSelect.activeStepTwo();
+    thisSelect.dom.grid.addEventListener('click', function () {
+      if (activeStep.stepValue == 2) {
+        const data = thisSelect.getData();
+
+        if (!thisSelect.checkIsCellSelected(data.cellId, selectedCells)
+          && start.length == 0) {
+          thisSelect.selectStart(data, start);
+        } else if (!thisSelect.checkIsCellSelected(data.cellId, selectedCells)
+          && start.length == 2
+          && end.length == 0
+          && (start[0] !== data.cellRow || start[1] !== data.cellCol)) {
+          thisSelect.selectEnd(grid, data, end);
+        }
+      }
+      console.log(start, end);
     });
-  }
+    thisSelect.dom.buttonTwo.addEventListener('click', function () {
+      thisSelect.dom.headerTwo.remove();
+      thisSelect.dom.buttonTwo.remove();
 
-  activeStepTwo() {
-    const thisSelect = this;
+      activeStep.changeStep = 3;
+    });
     
-    thisSelect.dom.buttonOneWrapper.classList.remove(classNames.step.stepActive);
-    thisSelect.dom.headerOneWrapper.classList.remove(classNames.step.stepActive);
-    thisSelect.dom.buttonTwoWrapper.classList.add(classNames.step.stepActive);
-    thisSelect.dom.headerTwoWrapper.classList.add(classNames.step.stepActive);
-
-    thisSelect.getData();
   }
 
   getData() {
-    const thisSelect = this;
+    const clickedElement = event.target;
 
-    thisSelect.startAndEnd = [];
+    const cellData = {
+      cellId: parseInt(clickedElement.getAttribute('id')),
+      cellCol: parseInt(clickedElement.getAttribute('col')),
+      cellRow: parseInt(clickedElement.getAttribute('row')),
+    };
+    return cellData;
+  }
 
-    if (thisSelect.dom.headerTwoWrapper.classList.contains(classNames.step.stepActive)) {
-      thisSelect.dom.grid.addEventListener('click', function () {
-        const clickedElement = event.target;
+  checkIsCellSelected(cellId, selectedCells) {
+    const indexOfCellId = selectedCells.indexOf(cellId);
 
-        thisSelect.cellId = clickedElement.getAttribute('id');
-        thisSelect.cellCol = clickedElement.getAttribute('col');
-        thisSelect.cellCol = parseInt(thisSelect.cellCol);
-        thisSelect.cellRow = clickedElement.getAttribute('row');
-        thisSelect.cellRow = parseInt(thisSelect.cellRow);
-        thisSelect.indexOfCell = thisSelect.startAndEnd.indexOf(thisSelect.cellId);
-
-        thisSelect.selectStartEnd();
-      });
+    if (indexOfCellId == -1) {
+      return true;
     }
   }
 
-  selectStartEnd() {
-    const thisSelect = this;
+  selectStart(data, start) {
     const clickedElement = event.target;
 
-    if (thisSelect.startAndEnd.length == 0
-      && clickedElement.classList.contains(classNames.grid.selectedCell)) {
-      clickedElement.classList.add(classNames.grid.starCell);
-    
-      thisSelect.startAndEnd.push(thisSelect.cellId);
-    
-      globalValue.start.push(thisSelect.cellRow, thisSelect.cellCol);
-    
-    } else if (thisSelect.startAndEnd.length == 1
-      && clickedElement.classList.contains(classNames.grid.selectedCell)
-      && thisSelect.indexOfCell == -1) {
-      clickedElement.classList.add(classNames.grid.endCell);
-    
-      thisSelect.startAndEnd.push(thisSelect.cellId);
-    
-      globalValue.end.push(thisSelect.cellRow, thisSelect.cellCol);
+    clickedElement.classList.add(classNames.grid.starCell);
 
-      changeGrid.addGoal(thisSelect.cellRow, thisSelect.cellCol);
-    }
+    start.push(data.cellRow, data.cellCol);
+  }
+
+  selectEnd(grid, data, end) {
+    const clickedElement = event.target;
+
+    clickedElement.classList.add(classNames.grid.endCell);
+
+    end.push(data.cellRow, data.cellCol);
+
+    grid[data.cellRow][data.cellCol].state = 'goal';
   }
 }
 
-export default selectStartAndEnd;
+export default SelectStartAndEnd;

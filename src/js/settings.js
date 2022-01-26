@@ -21,7 +21,6 @@ export const select = {
     links: '.nav-link',
   },
   grid: {
-    grid: '.grid',
     cell: '.cell',
     selectedCell: '.selected-cell',
     startCell: '.start-cell',

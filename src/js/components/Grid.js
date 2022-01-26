@@ -2,15 +2,17 @@ import { select, templates } from '../settings.js';
 import { utils } from '../utils.js';
 
 class Grid {
-  constructor(element) {
+  constructor() {
     const thisGrid = this;
 
     thisGrid.initGrid();
     thisGrid.renderGrid();
-
+    //const activeCell = thisGrid.findActiveCell();
+    //thisGrid.removeActiveClass(activeCell);
     thisGrid.start = [];
     thisGrid.end = [];
     thisGrid.selectedCells = [];
+    console.log(thisGrid.start, thisGrid.end, this.selectedCells);
   }
 
   initGrid() {
@@ -53,6 +55,12 @@ class Grid {
       }
     }
   }
+
+  /*findActiveCell() {
+    const activeCell = function () {
+      document.querySelector('div[row="' + path.row + '"][col="' + path.col + '"]');
+    };
+  }*/
 
 
 }

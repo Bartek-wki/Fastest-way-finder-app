@@ -1,128 +1,147 @@
-import { select, classNames, globalValue } from '../settings.js';
+import { select, classNames, handlebarsData } from '../settings.js';
+import RenderElement from './RenderElement.js';
+import Grid from './Grid.js';
 
-
-class compute {
-  constructor(element) {
+class Compute {
+  constructor(element, grid, start, end, activeStep, selectedCells) {
+    console.log('Hi!');
     const thisCompute = this;
-
+    
+    thisCompute.renderElement();
     thisCompute.getElement(element);
-    thisCompute.initAction();
+    thisCompute.initAction(activeStep, selectedCells);
+    thisCompute.computeRoutes(grid, start, end);
+  }
+  
+  renderElement() {
+    new RenderElement(handlebarsData.headerThree, handlebarsData.buttonThree);
   }
 
   getElement(element) {
     const thisCompute = this;
 
-    thisCompute.dom = {};
-
-    thisCompute.dom.grid = element.querySelector(select.grid.grid);
-    thisCompute.dom.buttonTwoWrapper = element.querySelector(select.containerOf.buttons.compute);
-    thisCompute.dom.headerTwoWrapper = element.querySelector(select.containerOf.headers.stepTwo);
-    thisCompute.dom.buttonThreeWrapper = element.querySelector(select.containerOf.buttons.startAgain);
-    thisCompute.dom.headerThreeWrapper = element.querySelector(select.containerOf.headers.stepThree);
-    thisCompute.dom.buttonTwo = element.querySelector(select.buttons.compute);
+    thisCompute.dom = {
+      grid: element.querySelector(select.containerOf.grid),
+      headerThree: element.querySelector(select.containerOf.stepHeader),
+      buttonThree: element.querySelector(select.buttons.startAgain),
+      cells: element.querySelectorAll(select.grid.cell),
+    };
   }
 
-  initAction() {
+  initAction(activeStep, selectedCells) {
     const thisCompute = this;
 
-    thisCompute.dom.buttonTwo.addEventListener('click', function () {
-      thisCompute.activeStepThree();
+    thisCompute.dom.buttonThree.addEventListener('click', function () {
+      thisCompute.dom.headerThree.remove();
+      thisCompute.dom.buttonThree.remove();
+      for (let cell of thisCompute.dom.cells) {
+        cell.remove();
+      }
+      
+      //selectedCells = [];
+      activeStep.changeStep = 1;
     });
   }
 
-  activeStepThree() {
-    const thisCompute = this;
+  computeRoutes(grid, start, end) {
+    let amountOfRow = grid.length;
+    let amountOfCol = grid[0].length;
 
-    thisCompute.dom.buttonTwoWrapper.classList.remove(classNames.step.stepActive);
-    thisCompute.dom.headerTwoWrapper.classList.remove(classNames.step.stepActive);
-    thisCompute.dom.buttonThreeWrapper.classList.add(classNames.step.stepActive);
-    thisCompute.dom.headerThreeWrapper.classList.add(classNames.step.stepActive);
-
-    thisCompute.computeRoutes();
-  }
-
-  computeRoutes() {
-    let grid = globalValue.grid;
-    let start = globalValue.start;
-    let end = globalValue.end;
-    let row = grid.length;
-    let col = grid[0].length;
-
-    const safeNeighbor = function (r, c) {
-      if (r < 0 || r >= row) return false;
-      if (c < 0 || c >= col) return false;
-      if (grid[r][c].state == 'block') return false;
+    const isSafeNeighbor = function (row, col) {
+      if (row < 0 || row >= amountOfRow) {
+        return false;
+      }
+      if (col < 0 || col >= amountOfCol) {
+        return false;
+      }
+      if (grid[row][col].state == 'block') {
+        return false;
+      }
       
       return true;
     };
 
     const exploreLocation = function (location) {
-      let r = location.r;
-      let c = location.c;
+      let row = location.row;
+      let col = location.col;
       let allNeighbors = [];
 
       //left
-      if (safeNeighbor(r, c - 1)) allNeighbors.push({ r: r, c: c - 1 });
+      if (isSafeNeighbor(row, col - 1)) {
+        allNeighbors.push({ row: row, col: col - 1 });
+      } 
       //right
-      if (safeNeighbor(r, c + 1)) allNeighbors.push({ r: r, c: c + 1 });
+      if (isSafeNeighbor(row, col + 1)) {
+        allNeighbors.push({ row: row, col: col + 1 });
+      } 
       //top
-      if (safeNeighbor(r - 1, c)) allNeighbors.push({ r: r - 1, c: c });
+      if (isSafeNeighbor(row - 1, col)) {
+        allNeighbors.push({ row: row - 1, col: col });
+      } 
       //bottom
-      if (safeNeighbor(r + 1, c)) allNeighbors.push({ r: r + 1, c: c });
+      if (isSafeNeighbor(row + 1, col)) {
+        allNeighbors.push({ row: row + 1, col: col });
+      } 
       
       return allNeighbors;
     };
 
-    const findPath = function () {
-      var location = {
-        r: start[0],
-        c: start[1],
+    const markCell = function () {
+      const location = {
+        row: start[0],
+        col: start[1],
       };
-      var queue = [];
+      const queue = [];
       queue.push(location);
       while (queue.length) {
-        var currentLocation = queue.shift();
+        const currentLocation = queue.shift();
 
-        if (currentLocation.r == end[0] && currentLocation.c == end[1])
+        if (currentLocation.row == end[0] && currentLocation.col == end[1]) {
           return currentLocation;
-        grid[currentLocation.r][currentLocation.c].state = 'visited';
-        var neighbors = exploreLocation(currentLocation);
+        }
+        grid[currentLocation.row][currentLocation.col].state = 'visited';
+        const neighbors = exploreLocation(currentLocation);
 
         for (let neighbor of neighbors)
         {
-          if(grid[neighbor.r][neighbor.c].state != 'visited')
+          if(grid[neighbor.row][neighbor.col].state != 'visited')
           {
             queue.push(neighbor);
-            grid[neighbor.r][neighbor.c]['parent'] = currentLocation;
+            grid[neighbor.row][neighbor.col]['parent'] = currentLocation;
           }
         }
       }
       return false;
     };
 
-    const printPath = function (path) {
-      let paths = [path];
+    const findPath = function (markedPath) {
+      let paths = [markedPath];
       /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
       while (true) {
-        let r = path.r;
-        let c = path.c;
-        let parent = grid[r][c].parent;
-        if (parent == undefined)
+        let row = markedPath.row;
+        let col = markedPath.col;
+        let parent = grid[row][col].parent;
+        if (parent == undefined) {
           break;
+        }
         paths.push(parent);
-        path = { r: parent.r, c: parent.c };
+        markedPath = { row: parent.row, col: parent.col };
       }
+
+      return paths;
+    };
+
+    const printPath = function (paths) {
       for (let path of paths) {
-        const findCell = document.querySelector('div[row="' + path.r + '"][col="' + path.c + '"]');
+        const findCell = document.querySelector('div[row="' + path.row + '"][col="' + path.col + '"]');
         findCell.classList.add(classNames.grid.starCell);
       }
     };
 
-    
-
-    let path = findPath();
-    printPath(path);
+    const markedPath = markCell();
+    const paths = findPath(markedPath);
+    printPath(paths);
   }
 }
 
-export default compute;
+export default Compute;

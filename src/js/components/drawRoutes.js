@@ -1,60 +1,50 @@
-import { select, classNames, templates, handlebarsData } from '../settings.js';
-import { utils } from '../utils.js';
+import { select, classNames, handlebarsData } from '../settings.js';
+import RenderElement from './RenderElement.js';
 
 class DrawRoutes {
   constructor(element, grid, selectedCells, activeStep) {
     const thisDrawRoutes = this;
     
     thisDrawRoutes.renderElement();
-    thisDrawRoutes.getElement(element, grid);
-    thisDrawRoutes.initAction(element, selectedCells, grid, activeStep);
-    console.log(activeStep);
+    thisDrawRoutes.getElement(element);
+    thisDrawRoutes.initAction(selectedCells, grid, activeStep);
   }
-
-  
 
   renderElement() {
-    const thisDrawRoutes = this;
-
-    // render header one
-    const generatedHeaderHTML = templates.header(handlebarsData.headerOne);
-    thisDrawRoutes.headerOne = utils.createDOMFromHTML(generatedHeaderHTML);
-    const headerWrapper = document.querySelector(select.containerOf.header);
-    headerWrapper.appendChild(thisDrawRoutes.headerOne);
-
-    // render button one
-    const generatedButtonHTML = templates.button(handlebarsData.buttonOne);
-    thisDrawRoutes.buttonOne = utils.createDOMFromHTML(generatedButtonHTML);
-    const buttonWrapper = document.querySelector(select.containerOf.button);
-    buttonWrapper.appendChild(thisDrawRoutes.buttonOne);
+    new RenderElement(handlebarsData.headerOne, handlebarsData.buttonOne);
   }
 
-  getElement(element, grid) {
+  getElement(element) {
     const thisDrawRoutes = this;
 
-    thisDrawRoutes.dom = {};
-
-    thisDrawRoutes.dom.grid = element.querySelector(select.containerOf.grid);
-    //thisDrawRoutes.dom.buttonOne = element.querySelector(select.buttons.finishDrawing);
+    thisDrawRoutes.dom = {
+      grid: element.querySelector(select.containerOf.grid),
+      headerOne: element.querySelector(select.containerOf.stepHeader),
+      buttonOne: element.querySelector(select.buttons.finishDrawing),
+    };
   }
 
-  initAction(element, selectedCells, grid, activeStep) {
+  initAction(selectedCells, grid, activeStep) {
     const thisDrawRoutes = this;
+
     thisDrawRoutes.dom.grid.addEventListener('click', function () {
-      if (activeStep == 1) {
+      if (activeStep.stepValue == 1) {
         const data = thisDrawRoutes.getData();
+
         if (thisDrawRoutes.checkIsCellSelected(data.cellId, selectedCells)) {
           thisDrawRoutes.selectCell(data, selectedCells, grid);
         } else if (!thisDrawRoutes.checkIsCellSelected(data.cellId, selectedCells)) {
           thisDrawRoutes.unselectCell(data, selectedCells, grid);
         }
       }
-      console.log(grid, selectedCells);
+      console.log(selectedCells);
     });
-    thisDrawRoutes.buttonOne.addEventListener('click', function () {
-      activeStep = 2;
+    thisDrawRoutes.dom.buttonOne.addEventListener('click', function () {
+      thisDrawRoutes.dom.headerOne.remove();
+      thisDrawRoutes.dom.buttonOne.remove();
+
+      activeStep.changeStep = 2;
     });
-    console.log(thisDrawRoutes.buttonOne);
   }
 
   getData() {

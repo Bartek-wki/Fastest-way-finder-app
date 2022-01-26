@@ -1,7 +1,7 @@
 import { select, classNames } from './settings.js';
-import DrawRoutes from './components/drawRoutes.js';
-import selectStartAndEnd from './components/selectStartAndEnd.js';
-import compute from './components/compute.js';
+import DrawRoutes from './components/DrawRoutes.js';
+import SelectStartAndEnd from './components/SelectStartAndEnd.js';
+import Compute from './components/Compute.js';
 import startAgain from './components/startAgain.js';
 import Grid from './components/Grid.js';
 
@@ -54,23 +54,36 @@ const app = {
     }
   },
 
-  activateStep: function () {
+  activateNewStep: function () {
     const thisApp = this;
-    thisApp.activStep = 1;
+
+    thisApp.activeStep = {
+      stepValue: '',
+      get changeStep() {
+        return this.stepValue;
+      },
+      set changeStep(step) {
+        this.stepValue = step;
+        this.changeStepListener(step);
+      },
+      changeStepListener: function () { },
+      registerNewListener: function (externalListenerFunction) {
+        this.changeStepListener = externalListenerFunction;
+      },
+    };
   },
 
   initGrid: function () {
     const thisApp = this;
-    const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
     
-    thisApp.grid = new Grid(finderWrapper);
+    thisApp.grid = new Grid();
   },
 
   initDrawRoutes: function () {
     const thisApp = this;
     const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
     
-    thisApp.drawRoutes = new DrawRoutes(finderWrapper, thisApp.grid.grid, thisApp.grid.selectedCells, thisApp.activStep);
+    thisApp.drawRoutes = new DrawRoutes(finderWrapper, thisApp.grid.grid, thisApp.grid.selectedCells, thisApp.activeStep);
   },
 
   initStartAndEnd: function () {
@@ -78,7 +91,13 @@ const app = {
 
     const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
     
-    thisApp.selectStartAndEnd = new selectStartAndEnd(finderWrapper);
+    thisApp.selectStartAndEnd = new SelectStartAndEnd(
+      finderWrapper,
+      thisApp.grid.grid,
+      thisApp.grid.start,
+      thisApp.grid.end,
+      thisApp.grid.selectedCells,
+      thisApp.activeStep);
   },
 
   initCompute: function () {
@@ -86,7 +105,13 @@ const app = {
 
     const finderWrapper = document.querySelector(select.containerOf.finderWrapper);
     
-    thisApp.compute = new compute(finderWrapper);
+    thisApp.compute = new Compute(
+      finderWrapper,
+      thisApp.grid.grid,
+      thisApp.grid.start,
+      thisApp.grid.end,
+      thisApp.activeStep,
+      thisApp.grid.selectedCells,);
   },
 
   initStartAgain: function () {
@@ -101,20 +126,37 @@ const app = {
     const thisApp = this;
 
     thisApp.initPages();
-    thisApp.initGrid();
-    
+    //thisApp.initGrid();
+    thisApp.activateNewStep();
+  
+
+    thisApp.activeStep.registerNewListener(function () {
+      if (thisApp.activeStep.stepValue == 2) {
+        thisApp.initStartAndEnd();
+      } else if (thisApp.activeStep.stepValue == 3) {
+        thisApp.initCompute();
+      } else if (thisApp.activeStep.stepValue == 1) {
+        delete thisApp.grid;
+        //delete thisApp.drawRoutes;
+        thisApp.initGrid();
+        thisApp.initDrawRoutes();
+        console.log(thisApp.drawRoutes);
+      }
+    });
+      
     if (thisApp.navLinks[1].classList.contains(classNames.nav.active)) {
-      thisApp.activateStep();
-      thisApp.initDrawRoutes();
+      thisApp.activeStep.changeStep = 1;
+      console.log('activ');
     } else {
       thisApp.navLinks[1].addEventListener('click', function () {
-        thisApp.activateStep();
-        thisApp.initDrawRoutes();
+        thisApp.activeStep.changeStep = 1;
+        console.log('click');
       });
     }
-    thisApp.initStartAndEnd();
-    thisApp.initCompute();
-    thisApp.initStartAgain();
+
+    
+
+    //thisApp.initStartAgain();
 
   }
 };
