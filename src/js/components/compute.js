@@ -1,45 +1,44 @@
-import { select, classNames, handlebarsData } from '../settings.js';
-import RenderElement from './RenderElement.js';
-import Grid from './Grid.js';
+import { select, classNames, innerHTMLData} from '../settings.js';
 
 class Compute {
-  constructor(element, grid, start, end, activeStep, selectedCells) {
-    console.log('Hi!');
+  constructor(element, grid, start, end, selectedCells, statusOfStepThree, statusOfStepZero) {
     const thisCompute = this;
-    
-    thisCompute.renderElement();
+
     thisCompute.getElement(element);
-    thisCompute.initAction(activeStep, selectedCells);
-    thisCompute.computeRoutes(grid, start, end);
-  }
-  
-  renderElement() {
-    new RenderElement(handlebarsData.headerThree, handlebarsData.buttonThree);
+    
+    statusOfStepThree.registerNewListener(function () {
+      thisCompute.renderElement();
+      thisCompute.computeRoutes(grid, start, end);
+      thisCompute.initAction(statusOfStepThree, statusOfStepZero, start, end);
+    });
   }
 
-  getElement(element) {
+  getElement() {
     const thisCompute = this;
 
     thisCompute.dom = {
-      grid: element.querySelector(select.containerOf.grid),
-      headerThree: element.querySelector(select.containerOf.stepHeader),
-      buttonThree: element.querySelector(select.buttons.startAgain),
-      cells: element.querySelectorAll(select.grid.cell),
+      grid: document.querySelector(select.containerOf.grid),
+      header: document.querySelector(select.containerOf.stepHeader),
+      button: document.querySelector(select.button),
     };
   }
 
-  initAction(activeStep, selectedCells) {
+  renderElement() {
     const thisCompute = this;
 
-    thisCompute.dom.buttonThree.addEventListener('click', function () {
-      thisCompute.dom.headerThree.remove();
-      thisCompute.dom.buttonThree.remove();
-      for (let cell of thisCompute.dom.cells) {
-        cell.remove();
+    thisCompute.dom.header.innerHTML = innerHTMLData.headerThree.headerTitle;
+    thisCompute.dom.button.innerHTML = innerHTMLData.buttonThree.buttonTitle;
+  }
+
+  initAction(statusOfStepThree, statusOfStepZero) {
+    const thisCompute = this;
+    thisCompute.dom.button.addEventListener('click', function () {
+      console.log('ok');
+
+      if (statusOfStepThree.stepStatus == 'active') {
+        statusOfStepThree.stepStatus = 'inactive';
+        statusOfStepZero.changeStep = 'active';
       }
-      
-      //selectedCells = [];
-      activeStep.changeStep = 1;
     });
   }
 

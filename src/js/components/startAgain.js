@@ -1,70 +1,59 @@
-import { select, classNames, globalValue } from '../settings.js';
-import { changeGrid } from './changeGrid.js';
-//import { changeGrid } from './changeGrid.js';
+import { select, classNames} from '../settings.js';
 
 class startAgain {
-  constructor(element) {
+  constructor(element, grid, start, end, selectedCells, statusOfStepZero, statusOfStepOne) {
     const thisStartAgain = this;
 
-    thisStartAgain.getElement(element);
-    thisStartAgain.initAction();
-  }
-
-  getElement(element) {
-    const thisStartAgain = this;
-
-    thisStartAgain.dom = {};
-
-    thisStartAgain.dom.grid = element.querySelector(select.grid.grid);
-    thisStartAgain.dom.buttonThreeWrapper = element.querySelector(select.containerOf.buttons.startAgain);
-    thisStartAgain.dom.headerThreeWrapper = element.querySelector(select.containerOf.headers.stepThree);
-    thisStartAgain.dom.buttonOneWrapper = element.querySelector(select.containerOf.buttons.finishDrawing);
-    thisStartAgain.dom.headerOneWrapper = element.querySelector(select.containerOf.headers.stepOne);
-
-    thisStartAgain.dom.buttonThree = element.querySelector(select.buttons.startAgain);
-  }
-
-  initAction() {
-    const thisStartAgain = this;
-
-    thisStartAgain.dom.buttonThree.addEventListener('click', function () {
-      thisStartAgain.getData();
+    statusOfStepZero.registerNewListener(function () {
+      thisStartAgain.removeSelectedCells(start, end, selectedCells);
+      thisStartAgain.restartGrid(grid);
+      const cellWithClasses = thisStartAgain.findClasses();
+      thisStartAgain.removeClasses(cellWithClasses);
+      thisStartAgain.initStartOne(statusOfStepZero, statusOfStepOne);
     });
   }
 
-  getData() {
-    const thisStartAgain = this;
-
-    thisStartAgain.activeCells = document.querySelectorAll(select.grid.startCell);
-    thisStartAgain.selectedCells = document.querySelectorAll(select.grid.selectedCell);
-    thisStartAgain.endCell = document.querySelector(select.grid.endCell);
-
-    thisStartAgain.activeStepOne();
+  removeSelectedCells(start, end, selectedCells) {
+    start.splice(0, start.length);
+    end.splice(0, end.length);
+    selectedCells.splice(0, selectedCells.length);
   }
 
-  activeStepOne() {
-    const thisStartAgain = this;
-    
-    thisStartAgain.dom.buttonThreeWrapper.classList.remove(classNames.step.stepActive);
-    thisStartAgain.dom.headerThreeWrapper.classList.remove(classNames.step.stepActive);
-    thisStartAgain.dom.buttonOneWrapper.classList.add(classNames.step.stepActive);
-    thisStartAgain.dom.headerOneWrapper.classList.add(classNames.step.stepActive);
+  restartGrid(grid) {
+    for (let row = 0; row < 10; row++) {
+      for (let col = 0; col < 10; col++) {
+        delete grid[row][col].parent;
+        grid[row][col].state = 'block';
+      }
+    }
+  }
 
-    for (let activeCell of thisStartAgain.activeCells) {
-      activeCell.classList.remove(classNames.grid.starCell);
+  findClasses() {
+    const cellWithClasses = {
+      select: document.querySelectorAll(select.grid.selectedCell),
+      start: document.querySelectorAll(select.grid.startCell),
+      end: document.querySelectorAll(select.grid.endCell),
+    };
+
+    return cellWithClasses;
+  }
+
+  removeClasses(cellWithClasses) {
+    for (let select of cellWithClasses.select) {
+      select.classList.remove(classNames.grid.selectedCell);
     }
 
-    for (let selectedCell of thisStartAgain.selectedCells) {
-      selectedCell.classList.remove(classNames.grid.selectedCell);
+    for (let start of cellWithClasses.start) {
+      start.classList.remove(classNames.grid.starCell);
     }
+    for (let end of cellWithClasses.end) {
+      end.classList.remove(classNames.grid.endCell);
+    }
+  }
 
-    thisStartAgain.endCell.classList.remove(classNames.grid.endCell);
-
-    globalValue.selectedCell = [];
-    globalValue.start = [];
-    globalValue.end = [];
-
-    changeGrid.restartGrid();
+  initStartOne(statusOfStepZero, statusOfStepOne) {
+    statusOfStepZero.stepStatus = 'inactive';
+    statusOfStepOne.changeStep = 'active';
   }
 
 }

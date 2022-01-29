@@ -1,34 +1,41 @@
-import { select, classNames, handlebarsData } from '../settings.js';
-import RenderElement from './RenderElement.js';
+import { select, classNames, innerHTMLData} from '../settings.js';
 
 class DrawRoutes {
-  constructor(element, grid, selectedCells, activeStep) {
+  constructor(element, grid, selectedCells, statusOfStepOne, statusOfStepTwo, start, end) {
     const thisDrawRoutes = this;
-    
-    thisDrawRoutes.renderElement();
+
     thisDrawRoutes.getElement(element);
-    thisDrawRoutes.initAction(selectedCells, grid, activeStep);
+    //thisDrawRoutes.renderElement();
+    thisDrawRoutes.initAction(selectedCells, grid, statusOfStepOne);
+
+    statusOfStepOne.registerNewListener(function () {
+      thisDrawRoutes.renderElement();
+      thisDrawRoutes.changeStep(statusOfStepOne, statusOfStepTwo, start, end);
+    });
   }
 
-  renderElement() {
-    new RenderElement(handlebarsData.headerOne, handlebarsData.buttonOne);
-  }
-
-  getElement(element) {
+  getElement() {
     const thisDrawRoutes = this;
 
     thisDrawRoutes.dom = {
-      grid: element.querySelector(select.containerOf.grid),
-      headerOne: element.querySelector(select.containerOf.stepHeader),
-      buttonOne: element.querySelector(select.buttons.finishDrawing),
+      grid: document.querySelector(select.containerOf.grid),
+      header: document.querySelector(select.containerOf.stepHeader),
+      button: document.querySelector(select.button),
     };
   }
 
-  initAction(selectedCells, grid, activeStep) {
+  renderElement() {
+    const thisDrawRoutes = this;
+
+    thisDrawRoutes.dom.header.innerHTML = innerHTMLData.headerOne.headerTitle;
+    thisDrawRoutes.dom.button.innerHTML = innerHTMLData.buttonOne.buttonTitle;
+  }
+
+  initAction(selectedCells, grid, statusOfStepOne) {
     const thisDrawRoutes = this;
 
     thisDrawRoutes.dom.grid.addEventListener('click', function () {
-      if (activeStep.stepValue == 1) {
+      if (statusOfStepOne.stepStatus == 'active') {
         const data = thisDrawRoutes.getData();
 
         if (thisDrawRoutes.checkIsCellSelected(data.cellId, selectedCells)) {
@@ -39,11 +46,17 @@ class DrawRoutes {
       }
       console.log(selectedCells);
     });
-    thisDrawRoutes.dom.buttonOne.addEventListener('click', function () {
-      thisDrawRoutes.dom.headerOne.remove();
-      thisDrawRoutes.dom.buttonOne.remove();
+   
+  }
 
-      activeStep.changeStep = 2;
+  changeStep(statusOfStepOne, statusOfStepTwo, start, end) {
+    const thisDrawRoutes = this;
+    console.log('ok3');
+    thisDrawRoutes.dom.button.addEventListener('click', function () {
+      if (statusOfStepOne.stepStatus == 'active' && start.length == 0 && end.length == 0) {
+        statusOfStepOne.stepStatus = 'inactive';
+        statusOfStepTwo.changeStep = 'active';
+      }
     });
   }
 
@@ -93,7 +106,6 @@ class DrawRoutes {
     if (selectedCells.indexOf(cellId + 10) !== -1) {
       activeNeighbors.push(cellId + 10);
     }
-    console.log(activeNeighbors);
     return activeNeighbors;
   }
 
@@ -106,6 +118,7 @@ class DrawRoutes {
       selectedCells.push(data.cellId);
 
       clickedElement.classList.add(classNames.grid.selectedCell);
+      console.log('Hi!');
 
       grid[data.cellRow][data.cellCol].state = 'empty';   
     } else {

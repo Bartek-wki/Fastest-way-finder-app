@@ -1,35 +1,41 @@
-import { select, classNames, handlebarsData } from '../settings.js';
-import RenderElement from './RenderElement.js';
+import { select, classNames, innerHTMLData} from '../settings.js';
 
 class SelectStartAndEnd {
-  constructor(element, grid, start, end, selectedCells, activeStep) {
-    console.log(start, end, selectedCells, activeStep);
+  constructor(element, grid, start, end, selectedCells, statusOfStepTwo, statusOfStepThree) {
     const thisSelect = this;
 
-    thisSelect.renderElement();
     thisSelect.getElement(element);
-    thisSelect.initAction(selectedCells, grid, start, end, activeStep);
+    //thisSelect.renderElement();
+    thisSelect.initAction(selectedCells, grid, start, end, statusOfStepTwo);
+    
+    statusOfStepTwo.registerNewListener(function () {
+      thisSelect.renderElement();
+      thisSelect.changeStep(statusOfStepTwo, statusOfStepThree, start, end);
+    });
   }
 
-  renderElement() {
-    new RenderElement(handlebarsData.headerTwo, handlebarsData.buttonTwo);
-  }
-
-  getElement(element) {
+  getElement() {
     const thisSelect = this;
 
     thisSelect.dom = {
-      grid: element.querySelector(select.containerOf.grid),
-      headerTwo: element.querySelector(select.containerOf.stepHeader),
-      buttonTwo: element.querySelector(select.buttons.compute),
+      grid: document.querySelector(select.containerOf.grid),
+      header: document.querySelector(select.containerOf.stepHeader),
+      button: document.querySelector(select.button),
     };
   }
 
-  initAction(selectedCells, grid, start, end, activeStep) {
+  renderElement() {
+    const thisSelect = this;
+
+    thisSelect.dom.header.innerHTML = innerHTMLData.headerTwo.headerTitle;
+    thisSelect.dom.button.innerHTML = innerHTMLData.buttonTwo.buttonTitle;
+  }
+
+  initAction(selectedCells, grid, start, end, statusOfStepTwo) {
     const thisSelect = this;
 
     thisSelect.dom.grid.addEventListener('click', function () {
-      if (activeStep.stepValue == 2) {
+      if (statusOfStepTwo.stepStatus == 'active') {
         const data = thisSelect.getData();
 
         if (!thisSelect.checkIsCellSelected(data.cellId, selectedCells)
@@ -44,13 +50,16 @@ class SelectStartAndEnd {
       }
       console.log(start, end);
     });
-    thisSelect.dom.buttonTwo.addEventListener('click', function () {
-      thisSelect.dom.headerTwo.remove();
-      thisSelect.dom.buttonTwo.remove();
+  }
 
-      activeStep.changeStep = 3;
+  changeStep(statusOfStepTwo, statusOfStepThree, start, end) {
+    const thisSelect = this;
+    thisSelect.dom.button.addEventListener('click', function () {
+      if (statusOfStepTwo.stepStatus == 'active' && start.length == 2 && end.length == 2) {
+        statusOfStepTwo.stepStatus = 'inactive';
+        statusOfStepThree.changeStep = 'active';
+      }
     });
-    
   }
 
   getData() {
